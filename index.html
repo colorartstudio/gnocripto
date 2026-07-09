@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GnoMiner — Gnomos da Mina Tycoon MVP</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones premium -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="./src/styles/globals.css?v=ux-final-20260708-topbar-balances-iphone-align">
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Os vetores SVG dos gnomos foram criados sob medida para carregar instantaneamente sem assets externos -->
+    <div class="hidden">
+        <!-- GNORIN VETOR SVG -->
+        <svg id="svg-gnorin" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#334155" />
+            <path d="M50 15 L25 50 L75 50 Z" fill="#eab308" /> <!-- Chapéu Amarelo -->
+            <circle cx="50" cy="22" r="4" fill="#ca8a04" />
+            <path d="M30 50 C30 70 70 70 70 50 Z" fill="#e2e8f0" /> <!-- Barba Branca -->
+            <circle cx="50" cy="48" r="7" fill="#fbcfe8" /> <!-- Nariz -->
+            <circle cx="43" cy="40" r="2.5" fill="#000" /> <!-- Olho L -->
+            <circle cx="57" cy="40" r="2.5" fill="#000" /> <!-- Olho R -->
+        </svg>
+
+        <!-- BORTOK VETOR SVG -->
+        <svg id="svg-bortok" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#475569" />
+            <path d="M50 10 L20 48 L80 48 Z" fill="#ea580c" /> <!-- Chapéu Vermelho Escuro -->
+            <circle cx="50" cy="15" r="5" fill="#c2410c" />
+            <path d="M28 48 C28 75 72 75 72 48 Z" fill="#f97316" /> <!-- Barba Ruiva Bruta -->
+            <circle cx="50" cy="45" r="9" fill="#fecdd3" /> <!-- Nariz Grande -->
+            <path d="M38 35 L48 38" stroke="black" stroke-width="2" /> <!-- Sobrancelha Brava -->
+            <path d="M62 35 L52 38" stroke="black" stroke-width="2" />
+            <circle cx="43" cy="40" r="3" fill="#000" />
+            <circle cx="57" cy="40" r="3" fill="#000" />
+        </svg>
+
+        <!-- ZELDRIK VETOR SVG -->
+        <svg id="svg-zeldrik" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#1e293b" />
+            <path d="M50 12 L22 45 L78 45 Z" fill="#0284c7" /> <!-- Chapéu Engenheiro Azul -->
+            <path d="M32 45 C32 68 68 68 68 45 Z" fill="#cbd5e1" /> <!-- Barba Cinza Curta -->
+            <circle cx="50" cy="43" r="6" fill="#fbcfe8" />
+            <!-- Óculos -->
+            <circle cx="41" cy="39" r="6" stroke="#fbbf24" stroke-width="2" fill="none" />
+            <circle cx="59" cy="39" r="6" stroke="#fbbf24" stroke-width="2" fill="none" />
+            <line x1="47" y1="39" x2="53" y2="39" stroke="#fbbf24" stroke-width="2" />
+            <circle cx="41" cy="39" r="1.5" fill="#000" />
+            <circle cx="59" cy="39" r="1.5" fill="#000" />
+        </svg>
+
+        <!-- FAGGRO VETOR SVG -->
+        <svg id="svg-faggro" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#334155" />
+            <path d="M50 15 C30 15 25 45 25 45 L75 45 C75 45 70 15 50 15 Z" fill="#16a34a" /> <!-- Capuz Verde Sorte -->
+            <path d="M30 45 C30 72 70 72 70 45 Z" fill="#d97706" /> <!-- Barba Castanha -->
+            <circle cx="50" cy="44" r="7" fill="#fecdd3" />
+            <!-- Brinco de Ouro -->
+            <circle cx="26" cy="52" r="3" stroke="#f59e0b" stroke-width="1.5" fill="none" />
+            <circle cx="43" cy="38" r="2.5" fill="#000" />
+            <circle cx="57" cy="38" r="2.5" fill="#000" />
+        </svg>
+
+        <!-- NYRA VETOR SVG -->
+        <svg id="svg-nyra" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="#475569" />
+            <path class="nyra-magic-ring" d="M18 62 C28 57 39 55 50 55 C61 55 72 57 82 62" stroke="#f9a8d4" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.45" />
+            <path class="nyra-magic-dust-a" d="M18 40 L20 44.5 L24.5 46 L20 47.5 L18 52 L16 47.5 L11.5 46 L16 44.5 Z" fill="#fde68a" />
+            <path class="nyra-magic-dust-b" d="M76 61 L77.4 64.2 L80.6 65.5 L77.4 66.8 L76 70 L74.6 66.8 L71.4 65.5 L74.6 64.2 Z" fill="#f9a8d4" />
+            <!-- Cabelo base -->
+            <path d="M28 45 C29 27 40 18 50 18 C60 18 71 27 72 45 L68 54 C63 48 57 45 50 45 C43 45 37 48 32 54 Z" fill="#f472b6" />
+            <path class="nyra-dance-hat" d="M50 15 L25 45 L75 45 Z" fill="#db2777" /> <!-- Chapéu Rosa -->
+            <path class="nyra-hat-gem" d="M50 20 L54 25 L50 30 L46 25 Z" fill="#fde68a" stroke="#fbbf24" stroke-width="1.3" />
+            <circle class="nyra-hat-gem-core" cx="50" cy="25" r="1.6" fill="#fff7ed" />
+            <!-- Franja -->
+            <path d="M34 43 C38 36 44 33 50 33 C56 33 62 36 66 43" stroke="#ec4899" stroke-width="4.5" stroke-linecap="round" fill="none" />
+            <!-- Mechas laterais -->
+            <path d="M33 43 C30 47 29 52 30 58" stroke="#f9a8d4" stroke-width="3.6" stroke-linecap="round" fill="none" />
+            <path d="M67 43 C70 47 71 52 70 58" stroke="#f9a8d4" stroke-width="3.6" stroke-linecap="round" fill="none" />
+            <!-- Tranças Laterais -->
+            <path d="M27 45 C22 53 22 61 24 69 C25 74 25 79 23 84" stroke="#f472b6" stroke-width="6.2" stroke-linecap="round" fill="none" />
+            <path d="M73 45 C78 53 78 61 76 69 C75 74 75 79 77 84" stroke="#f472b6" stroke-width="6.2" stroke-linecap="round" fill="none" />
+            <path d="M26 52 L22 58" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M26 61 L22 67" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M26 70 L22 76" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M74 52 L78 58" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M74 61 L78 67" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M74 70 L78 76" stroke="#f9a8d4" stroke-width="3.5" stroke-linecap="round" />
+            <ellipse cx="23" cy="78" rx="2.3" ry="3.3" fill="#ec4899" />
+            <ellipse cx="77" cy="78" rx="2.3" ry="3.3" fill="#ec4899" />
+            <circle cx="23" cy="83" r="1.6" fill="#f9a8d4" />
+            <circle cx="77" cy="83" r="1.6" fill="#f9a8d4" />
+            <path class="nyra-dance-face" d="M32 45 C32 65 68 65 68 45 Z" fill="#fbcfe8" /> <!-- Rosto suave, sem barba -->
+            <circle cx="50" cy="46" r="6" fill="#fda4af" />
+            <path d="M37 34.8 C39.5 32.8 42.7 32.5 45.2 34" stroke="#831843" stroke-width="1.9" stroke-linecap="round" fill="none" />
+            <path d="M54.8 34 C57.3 32.5 60.5 32.8 63 34.8" stroke="#831843" stroke-width="1.9" stroke-linecap="round" fill="none" />
+            <ellipse class="nyra-eye-left" cx="41" cy="40.5" rx="3.3" ry="3.8" fill="#111827" />
+            <ellipse class="nyra-eye-right" cx="59" cy="40.5" rx="3.3" ry="3.8" fill="#111827" />
+            <circle class="nyra-eye-spark-left" cx="40.2" cy="39.4" r="1.1" fill="#ffffff" />
+            <circle class="nyra-eye-spark-right" cx="58.2" cy="39.4" r="1.1" fill="#ffffff" />
+            <path d="M38.2 36.5 L36.9 35.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path d="M41 35.9 L40.7 34.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path d="M43.8 36.6 L45 35.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path d="M56.2 36.6 L55 35.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path d="M59 35.9 L59.3 34.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path d="M61.8 36.5 L63.1 35.2" stroke="#f9a8d4" stroke-width="1.1" stroke-linecap="round" />
+            <path class="nyra-smile" d="M45.5 54 Q50 59.2 54.5 54" stroke="#db2777" stroke-width="2.2" fill="none" /> <!-- Sorriso -->
+        </svg>
+    </div>
+
+    <!-- Topbar principal (Fixa no Desktop, Compacta no Mobile) -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 px-4 py-3 shadow-lg">
+        <div id="topbar-shell" class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Brand & XP Info -->
+            <div id="topbar-main" class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full md:w-auto gap-3 min-w-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="bg-amber-500 text-slate-900 p-2.5 rounded-xl font-black text-lg sm:text-xl tracking-tight shadow-md flex items-center gap-2 shrink-0">
+                        <i class="fa-solid fa-helmet-safety animate-bounce"></i>
+                        <span class="truncate">GnoMiner</span>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400 font-bold uppercase tracking-wider" data-i18n="topbar.level">Nível</span>
+                            <span id="player-level" class="text-sm font-black text-amber-400 bg-slate-900/60 px-2 py-0.5 rounded-md">1</span>
+                        </div>
+                        <div class="w-24 sm:w-28 md:w-36 bg-slate-950 h-2 rounded-full mt-1 overflow-hidden border border-slate-700">
+                            <div id="player-xp-bar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Audio and Quick Save button -->
+                <div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    <button onclick="toggleAudio()" id="btn-audio" class="bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-xl transition duration-200" title="Alternar Som" data-i18n-title="topbar.toggleAudio">
+                        <i id="audio-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <button onclick="switchTab('configuracoes')" id="btn-configuracoes" class="bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-xl transition duration-200" title="Abrir Configurações" data-i18n-title="topbar.openSettings">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <div id="lang-selector" class="relative">
+                        <button onclick="toggleLanguageMenu(event)" class="bg-slate-700 hover:bg-slate-600 text-slate-300 p-2 rounded-xl transition duration-200 relative" title="Idioma" data-i18n-title="topbar.language">
+                            <i class="fa-solid fa-language"></i>
+                            <span id="lang-badge" class="absolute top-0.5 right-0.5 bg-amber-500 text-slate-950 text-[8px] font-black px-1 py-0 rounded-sm border border-amber-300 leading-tight">PT</span>
+                        </button>
+                        <div id="lang-menu" class="hidden absolute right-0 mt-2 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl overflow-hidden min-w-32">
+                            <button onclick="setLanguage('pt-BR')" class="w-full text-left px-4 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 transition">PT-BR</button>
+                            <button onclick="setLanguage('en')" class="w-full text-left px-4 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 transition">EN</button>
+                            <button onclick="setLanguage('es')" class="w-full text-left px-4 py-2 text-xs font-bold text-slate-200 hover:bg-slate-800 transition">ES</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balances and Swap Section -->
+            <div id="topbar-balances" class="flex flex-wrap items-center justify-end gap-3 w-full md:w-auto text-sm">
+                <!-- USDT Balance simulated -->
+                <div class="bg-slate-900/90 border border-slate-700/80 px-4 py-2 rounded-2xl flex items-center gap-2.5 shadow-inner">
+                    <span class="w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-xs border border-emerald-500/30">
+                        <i class="fa-solid fa-dollar-sign"></i>
+                    </span>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase leading-none">USDT (BSC)</p>
+                        <p id="bal-usdt" class="font-extrabold text-slate-100 text-sm mt-0.5">10.00</p>
+                    </div>
+                </div>
+
+                <!-- GnoCripto ($1 = 100 GnoCripto) -->
+                <div class="bg-slate-900/90 border border-slate-700/80 px-4 py-2 rounded-2xl flex items-center gap-2.5 shadow-inner">
+                    <span class="w-6 h-6 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/30">
+                        <i class="fa-solid fa-coins"></i>
+                    </span>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-semibold uppercase leading-none">GnoCripto</p>
+                        <p id="bal-gnocripto" class="font-extrabold text-amber-400 text-sm mt-0.5">1,000</p>
+                    </div>
+                </div>
+
+                <button onclick="openWalletModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 transition duration-200 shadow-md">
+                    <i class="fa-solid fa-wallet text-xs"></i>
+                    <span data-i18n="topbar.wallet">Wallet</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notificações Flutuantes Integradas -->
+    <div id="notification-area" class="fixed top-20 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Banner de Evento Ativo e Notificação de Balanceador -->
+    <section id="alert-banner" class="hidden bg-red-950/80 border-b border-red-800 text-red-200 px-4 py-3 text-center text-sm font-semibold transition duration-300">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>
+            <span id="alert-banner-text" data-i18n="alert.activeCrisis">Aviso de Evento de Crise Ativo!</span>
+            <button onclick="resolveCurrentCrisis()" class="ml-4 bg-amber-500 hover:bg-amber-400 text-slate-950 px-3 py-1 rounded-lg text-xs font-bold transition duration-150 shadow" data-i18n="alert.resolve">
+                Resolver Evento!
+            </button>
+        </div>
+    </section>
+
+    <!-- Guia Rápido de Tutorial (Iniciante) -->
+    <div id="tutorial-card" class="bg-amber-500/15 border border-amber-500/30 m-4 p-4 rounded-2xl text-slate-200 text-xs md:text-sm max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="text-2xl">💡</span>
+            <div>
+                <h4 class="font-extrabold text-amber-400" data-i18n="tutorial.title">Guia de Início Rápido (Tutorial)</h4>
+                <p class="text-slate-300 mt-1" data-i18n-html="tutorial.copy">Bem-vindo, supervisor! Comece comprando Energia e contratando o gnomo <strong>Gnorin</strong> na loja para automatizar a <strong>Mina 1</strong>. Colete recursos brutos para desbloquear as próximas minas e acumular GnoCriptos para trocar por USDT real!</p>
+            </div>
+        </div>
+        <button onclick="dismissTutorial()" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 font-bold px-3 py-1.5 rounded-xl transition whitespace-nowrap self-stretch md:self-center" data-i18n="tutorial.dismiss">
+            Entendi, ocultar!
+        </button>
+    </div>
+
+    <!-- Área Central de Conteúdo Multitelas -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 pb-24 md:pb-24">
+
+        <!-- TELA 1: PAINEL DE MINAS -->
+        <section id="tab-minas" class="space-y-6">
+            <!-- Inteligência do Balanceador Automático (Investment Advisor Card) -->
+            <div id="mines-advisor-card" class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-4 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h3 id="advisor-title" class="text-sm font-bold text-slate-200" data-i18n="mines.advisorTitle">Balanceador Automático de Investimento</h3>
+                        <p id="advisor-text" class="text-xs text-slate-400 mt-0.5" data-i18n="mines.advisorCalculating">Calculando dados de eficiência das suas minas...</p>
+                    </div>
+                </div>
+                <div id="advisor-action" class="flex items-center gap-2">
+                    <!-- Gerado dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Lista de 5 Minas -->
+            <div id="mines-grid-shell" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Template das minas é injetado via JS de maneira reativa -->
+                <div id="mines-container" class="contents"></div>
+            </div>
+        </section>
+
+        <!-- TELA 2: LOJA -->
+        <section id="tab-loja" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                <div>
+                    <h2 id="shop-title" class="text-xl font-extrabold text-slate-100" data-i18n="shop.title">Mercado do Clã</h2>
+                    <p id="shop-subtitle" class="text-xs text-slate-400 mt-1" data-i18n="shop.subtitle">Gerencie e contrate recursos vitais de mineração. Clique em qualquer Gnomo para ver sua ficha detalhada de habilidades!</p>
+                </div>
+                <!-- Mini Balanço de Energia -->
+                <div class="bg-slate-800/80 border border-slate-700/80 px-3 py-1.5 rounded-xl flex items-center gap-2 text-xs">
+                    <i class="fa-solid fa-bolt text-yellow-400"></i>
+                    <span class="font-bold text-slate-300"><span data-i18n="shop.yourEnergy"></span>Sua Energia</span>: <span id="shop-energy-val" class="text-yellow-400">100</span>%</span>
+                </div>
+            </div>
+
+            <!-- Subabas da Loja -->
+            <div class="grid grid-cols-3 gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+                <button onclick="switchShopSubTab('gnomos')" id="btn-sub-gnomos" class="bg-slate-800 text-amber-400 font-bold py-2 rounded-xl text-xs md:text-sm shadow transition">
+                    <i class="fa-solid fa-users mr-1"></i> <span data-i18n="shop.tabs.gnomes">Gnomos</span>
+                </button>
+                <button onclick="switchShopSubTab('equipamentos')" id="btn-sub-equipamentos" class="text-slate-400 hover:text-slate-200 font-bold py-2 rounded-xl text-xs md:text-sm transition">
+                    <i class="fa-solid fa-screwdriver-wrench mr-1"></i> <span data-i18n="shop.tabs.gear">Equipar</span>
+                </button>
+                <button onclick="switchShopSubTab('energia')" id="btn-sub-energia" class="text-slate-400 hover:text-slate-200 font-bold py-2 rounded-xl text-xs md:text-sm transition">
+                    <i class="fa-solid fa-plug mr-1"></i> <span data-i18n="shop.tabs.supplies">Suprimentos</span>
+                </button>
+            </div>
+
+            <!-- ABA SHOP: GNOMOS -->
+            <div id="shop-gnomos" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Gerado por javascript com os 5 personagens planejados -->
+            </div>
+
+            <!-- ABA SHOP: EQUIPAMENTOS -->
+            <div id="shop-equipamentos" class="hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <!-- Gerado dinamicamente -->
+            </div>
+
+            <!-- ABA SHOP: ENERGIA -->
+            <div id="shop-energia" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Gerado dinamicamente -->
+            </div>
+        </section>
+
+        <!-- TELA 3: INVENTÁRIO -->
+        <section id="tab-inventario" class="hidden space-y-6">
+            <div class="border-b border-slate-700 pb-4">
+                <h2 class="text-xl font-extrabold text-slate-100" data-i18n="inventory.title">Armazém de Recursos</h2>
+                <p class="text-xs text-slate-400 mt-1" data-i18n="inventory.subtitle">Materiais minerados bruto e fragmentos cripto temáticos colecionados.</p>
+            </div>
+
+            <!-- Painel de Recursos Brutos -->
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80">
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-stacked text-amber-500"></i>
+                    <span data-i18n="inventory.rawTitle">Minérios Extraídos</span>
+                </h3>
+                <div id="inventory-raw" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                    <!-- Dinâmico -->
+                </div>
+            </div>
+
+            <!-- Painel de Fragmentos Especiais Colecionáveis -->
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80">
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-gem text-purple-500"></i>
+                    <span data-i18n="inventory.collectibleTitle">Fragmentos Temáticos Colecionáveis</span>
+                </h3>
+                <div id="inventory-collectible" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
+                    <!-- Dinâmico -->
+                </div>
+            </div>
+
+            <!-- Painel de Equipamentos Equipados nas Minas -->
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80">
+                <h3 class="text-sm font-bold text-slate-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-screwdriver-wrench text-blue-400"></i>
+                    <span data-i18n="inventory.gearTitle">Sua Infraestrutura e Equipamentos</span>
+                </h3>
+                <div id="inventory-gear" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <!-- Dinâmico -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 4: AFILIADOS (8 NÍVEIS & RANKING) -->
+        <section id="tab-afiliados" class="hidden space-y-6">
+            <div class="border-b border-slate-700 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-100" data-i18n="referrals.title">Residual & Programa de Afiliados</h2>
+                    <p class="text-xs text-slate-400 mt-1" data-i18n="referrals.subtitle">Multiplique os lucros com rede multinível de indicação virtual (até 8 níveis).</p>
+                </div>
+                <!-- Código de Indicação Simulado -->
+                <div class="bg-slate-800/90 border border-slate-700 px-3 py-1.5 rounded-xl flex items-center gap-3 text-xs self-stretch sm:self-auto">
+                    <span class="text-slate-400" data-i18n="referrals.yourLink">Seu Link</span>:
+                    <span id="ref-code" class="font-mono font-bold text-amber-400 select-all">GNOMIN-9941</span>
+                    <button onclick="copyRefLink()" class="text-slate-300 hover:text-amber-400 transition" title="Copiar Link" data-i18n-title="referrals.copyLink">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Ranking / Patente Progression -->
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 border border-slate-700/80 rounded-2xl p-5 shadow-lg relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 text-9xl text-amber-500/5 select-none pointer-events-none">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="rank-badge" class="bg-amber-500 text-slate-950 text-xs font-black uppercase px-2.5 py-1 rounded-lg">Gno1</span>
+                            <h3 class="text-lg font-black text-amber-400" data-i18n="referrals.leadershipRank">Grau de Patente de Liderança</h3>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1 max-w-lg" data-i18n="referrals.rankCopy">Sua comissão residual aumenta progressivamente com base no volume de vendas indicado. Aumente seu volume de indicação para avançar de Gno1 a Gno5!</p>
+                    </div>
+                    <div class="text-left md:text-right">
+                        <p class="text-xs text-slate-400 leading-none" data-i18n="referrals.volumeAccumulated">Volume Indicado Acumulado</p>
+                        <p id="ref-volume-text" class="text-xl font-black text-slate-200 mt-1">$0 / $500</p>
+                    </div>
+                </div>
+
+                <!-- Barra de Progresso do Volume para Próxima Patente -->
+                <div class="w-full bg-slate-950 h-3 rounded-full mt-4 overflow-hidden border border-slate-800 flex">
+                    <div id="rank-progress-bar" class="bg-gradient-to-r from-amber-500 to-amber-300 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <!-- Detalhamento de Comissões de acordo com Patente Atual -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-800 text-xs">
+                    <div>
+                        <p class="text-slate-400" data-i18n="referrals.directLevel">1º Nível (Diretos)</p>
+                        <p id="ref-rate-1" class="text-sm font-extrabold text-amber-400">10% Residual</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400" data-i18n="referrals.level23">2º ao 3º Nível</p>
+                        <p id="ref-rate-2-3" class="text-sm font-extrabold text-amber-400">5% Residual</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400" data-i18n="referrals.level48">4º ao 8º Nível</p>
+                        <p id="ref-rate-4-8" class="text-sm font-extrabold text-amber-400">2.5% Residual</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-400" data-i18n="referrals.nextRank">Próxima Patente</p>
+                        <p id="ref-next-rank" class="text-sm font-extrabold text-slate-300">Gno2 (Req: $500)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulador de Rede Ativa -->
+            <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700/80 space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-network-wired text-indigo-400"></i>
+                            <span data-i18n="referrals.networkTitle">Painel de Indicados Ativos (Simulação de Rede)</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5" data-i18n="referrals.networkSubtitle">Use the simulator below to generate friends and earn residuals in real time.</p>
+                    </div>
+                    <!-- Botão de simulação de novas indicações de amigos -->
+                    <button onclick="simulateReferralInvite()" class="bg-indigo-600 hover:bg-indigo-500 text-slate-100 text-xs font-bold px-4 py-2 rounded-xl transition duration-200 shadow flex items-center gap-1">
+                        <i class="fa-solid fa-user-plus"></i> <span data-i18n="referrals.inviteSimulated">Convidar Amigo Simulado</span>
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead>
+                            <tr class="bg-slate-900 text-slate-400 font-bold uppercase tracking-wider border-b border-slate-700">
+                                <th class="p-3 rounded-l-xl" data-i18n="referrals.table.friend">Amigo</th>
+                                <th class="p-3" data-i18n="referrals.table.lineLevel">Nível de Linha</th>
+                                <th class="p-3" data-i18n="referrals.table.dailyYield">Rendimento Diário</th>
+                                <th class="p-3" data-i18n="referrals.table.activeVolume">Volume Ativo</th>
+                                <th class="p-3 rounded-r-xl" data-i18n="referrals.table.yourCommission">Sua Comissão (Residual)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="referrals-table-body">
+                            <!-- Inserido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 5: MISSÕES & COMPLEMENTOS -->
+        <section id="tab-missoes" class="hidden space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Roleta da Fortuna Diária -->
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 flex flex-col items-center">
+                    <h3 class="text-sm font-bold text-slate-200 mb-1 self-start flex items-center gap-2">
+                        <i class="fa-solid fa-circle-notch text-amber-500 animate-spin"></i>
+                        <span data-i18n="wheel.title">Roleta da Fortuna de GnoCripto</span>
+                    </h3>
+                    <p class="text-xs text-slate-400 self-start mb-6" data-i18n="wheel.subtitle">Gire uma vez gratuitamente a cada rodada de jogo para coletar suprimentos!</p>
+
+                    <!-- Design da Roleta Rústica de Madeira -->
+                    <div class="relative w-56 h-56 flex items-center justify-center mb-6">
+                        <!-- Marcador de topo -->
+                        <div class="absolute -top-2 z-10 text-amber-500 text-xl">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </div>
+                        <!-- Círculo giratório -->
+                        <div id="roulette-wheel" class="roulette-wheel-colors w-full h-full rounded-full border-8 border-amber-950 bg-slate-900 relative overflow-hidden wheel-transition shadow-xl" style="transform: rotate(0deg)"></div>
+                        <!-- Centro da roleta -->
+                        <div class="absolute w-12 h-12 rounded-full bg-amber-600 border-4 border-amber-950 flex items-center justify-center shadow">
+                            <i class="fa-solid fa-crosshairs text-slate-900 text-sm"></i>
+                        </div>
+                    </div>
+
+                    <button onclick="spinFortuneWheel()" id="btn-spin" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition duration-200 shadow-md">
+                        <span data-i18n="wheel.spin">Girar e Revelar!</span>
+                    </button>
+                    <div id="roulette-result-panel" class="roulette-result-panel hidden w-full mt-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h4 id="roulette-result-title" class="text-sm font-extrabold text-slate-100" data-i18n="wheel.surpriseResult">Resultado Surpresa</h4>
+                            <span id="roulette-result-badge" class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wide bg-emerald-500/15 text-emerald-300 border border-emerald-500/30" data-i18n="wheel.waitingSpin">Aguardando giro</span>
+                        </div>
+                        <p id="roulette-result-copy" class="text-xs text-slate-300" data-i18n="wheel.hiddenPrize">O prêmio real só aparece quando a roleta parar.</p>
+                        <p id="roulette-result-lane" class="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500" data-i18n="wheel.laneHidden">Faixa parada: oculto</p>
+                    </div>
+                </div>
+
+                <!-- Missões Diárias Renovadas -->
+                <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 space-y-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-scroll text-yellow-500"></i>
+                            <span data-i18n="missionUi.activeBoardTitle">Quadro de Missões Ativas</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5" data-i18n="missionUi.activeBoardCopy">Avance por várias fases, acompanhe o progresso e colete cada recompensa no momento certo.</p>
+                    </div>
+
+                    <div id="missions-container" class="space-y-3">
+                        <!-- Gerado por JS dinamicamente -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Conquistas de Carreira -->
+            <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-4 space-y-4">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-trophy text-amber-400"></i>
+                        <span data-i18n="missionUi.globalStatsTitle">Conquistas e Estatísticas Globais</span>
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-0.5" data-i18n="missionUi.globalStatsCopy">Marcos e marcas históricas da sua administração nas minas.</p>
+                </div>
+                <div id="stats-panel" class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                    <!-- Dinâmico -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TELA 6: CONFIGURAÇÕES -->
+        <section id="tab-configuracoes" class="hidden space-y-6">
+            <div class="border-b border-slate-700 pb-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-100" data-i18n="settings.platformTitle">Configurações da Plataforma</h2>
+                    <p class="text-xs text-slate-400 mt-1" data-i18n="settings.platformCopy">Gerencie sua carteira de saque, preferências de som e ações sensíveis da conta.</p>
+                </div>
+                <div class="bg-slate-800/80 border border-slate-700/80 px-3 py-2 rounded-xl text-xs text-slate-300">
+                    <span data-i18n="settings.withdrawalsEnabled">Saques habilitados:</span> <span class="text-amber-400 font-black">USDT na rede BSC / BEP20</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-emerald-400"></i>
+                            <span data-i18n="settings.withdrawalWallet">Carteira de Saque</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1" data-i18n="settings.walletIntro">Cadastre varias carteiras USDT na rede BSC, escolha a carteira ativa e use essa selecao no momento do saque.</p>
+                    </div>
+
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                        <p class="text-[10px] uppercase tracking-wide text-slate-500 font-black" data-i18n="settings.currentDestination">Destino atual</p>
+                        <p id="settings-wallet-current" class="text-sm font-bold text-slate-200 mt-2">Nenhuma carteira configurada para saque</p>
+                        <p id="settings-wallet-hint" class="text-xs text-slate-400 mt-1">Cadastre uma carteira BSC para liberar saques de GnoCripto para USDT.</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <input id="settings-wallet-id" type="hidden">
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wide" data-i18n="settings.walletName">Nome da Carteira</label>
+                            <input id="settings-withdrawal-label" type="text" class="w-full bg-slate-950 border border-slate-800 text-slate-200 px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-amber-500 mt-1" placeholder="Ex.: Carteira Principal" data-i18n-placeholder="settings.walletNamePlaceholder">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wide" data-i18n="settings.walletAddress">Endereço USDT na Rede BSC</label>
+                            <input id="settings-withdrawal-address" type="text" class="w-full bg-slate-950 border border-slate-800 text-slate-200 px-3 py-2 rounded-xl text-xs font-mono focus:outline-none focus:border-amber-500 mt-1" placeholder="0x...">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="saveWithdrawalWallet()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition duration-200 shadow-md">
+                            <span id="settings-wallet-submit-label" data-i18n="settings.addWallet">Adicionar Carteira</span>
+                        </button>
+                        <button onclick="resetWalletForm()" id="settings-wallet-cancel-edit" class="hidden flex-1 bg-slate-900 hover:bg-slate-950 border border-slate-700 text-slate-300 font-bold py-3 rounded-xl transition duration-200">
+                            <span data-i18n="settings.cancel">Cancelar</span>
+                        </button>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-700/80 space-y-3">
+                        <div class="flex items-center justify-between gap-3">
+                            <h4 class="text-sm font-bold text-slate-200" data-i18n="settings.registeredWallets">Carteiras Cadastradas</h4>
+                            <span class="text-[10px] uppercase font-black text-emerald-400">USDT / BSC</span>
+                        </div>
+                        <div id="settings-wallet-list" class="space-y-3">
+                            <!-- Dinamico -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-blue-400"></i>
+                                <span data-i18n="settings.preferencesTitle">Preferências</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="settings.preferencesCopy">Ajustes rápidos para a sua experiência dentro do painel.</p>
+                        </div>
+
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-bold text-slate-200" data-i18n="settings.soundEffects">Efeitos Sonoros</p>
+                                <p class="text-xs text-slate-400 mt-1" data-i18n="settings.soundEffectsCopy">Controla feedbacks de coleta, upgrade, alerta e roleta.</p>
+                            </div>
+                            <div class="text-right">
+                                <p id="settings-audio-status" class="text-xs font-black text-emerald-400">Ativado</p>
+                                <button onclick="toggleAudio()" class="mt-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition">
+                                    <span data-i18n="settings.toggleSound">Alternar Som</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-amber-400"></i>
+                                <span data-i18n="settings.historyTitle">Historico de Transacoes</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="settings.historyCopy">Registra compras de GnoCripto e saques em USDT BSC executados no painel.</p>
+                        </div>
+
+                        <div id="settings-withdrawal-history" class="space-y-3">
+                            <!-- Dinamico -->
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/80 rounded-2xl border border-slate-700/80 p-5 space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-red-400"></i>
+                                <span data-i18n="settings.securityTitle">Segurança e Dados</span>
+                            </h3>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="settings.securityCopy">Ações críticas do perfil e do progresso da conta local.</p>
+                        </div>
+
+                        <div class="bg-red-950/20 border border-red-900/40 rounded-xl p-4">
+                            <p class="text-sm font-bold text-red-300" data-i18n="settings.resetLocal">Redefinir progresso local</p>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="settings.resetLocalCopy">Apaga o estado salvo no navegador e reinicia minas, inventário, missões e saldo do MVP.</p>
+                            <button onclick="resetGame()" class="mt-4 bg-red-900/50 hover:bg-red-900/70 border border-red-800/50 text-red-200 font-bold px-4 py-2 rounded-xl text-xs transition">
+                                <span data-i18n="settings.resetGame">Redefinir Jogo</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE DETALHES DO GNOMO (NOVO REQUISITO) -->
+    <div id="modal-gnome-detail" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-start md:items-center justify-center p-4 overflow-y-auto hidden" role="dialog" aria-modal="true" aria-labelledby="gnome-detail-name" aria-hidden="true">
+        <div id="gnome-detail-shell" class="bg-slate-900 border border-slate-700 max-w-2xl w-full max-h-[calc(100vh-2rem)] rounded-3xl overflow-y-auto shadow-2xl relative transition duration-300 my-auto" tabindex="-1">
+            <!-- Cabeçalho colorido por raridade via JS -->
+            <div id="gnome-detail-header" class="p-6 bg-slate-950 border-b border-slate-800 flex items-center justify-between relative">
+                <button onclick="closeGnomeDetailModal()" class="absolute right-4 top-4 bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded-full w-8 h-8 flex items-center justify-center transition text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <button onclick="openGnomeShowcaseFromDetail()" id="btn-gnome-showcase" class="absolute right-14 top-4 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-amber-300 rounded-full w-10 h-10 flex items-center justify-center transition text-sm border border-slate-600/70 gnome-showcase-cta group" title="Ver animação do gnomo">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span class="sr-only">Animar</span>
+                    <span class="absolute -bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap bg-amber-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg group-hover:scale-105 transition">
+                        Clique
+                    </span>
+                </button>
+                <div class="flex items-center gap-4 pr-24">
+                    <div id="gnome-detail-svg-container" class="w-20 h-20 rounded-2xl bg-slate-900 border border-slate-700 overflow-hidden flex-shrink-0 shadow-inner">
+                        <!-- SVG injetado dinamicamente -->
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="gnome-detail-name" class="text-xl font-black text-slate-100">Gnomo</h3>
+                            <span id="gnome-detail-rarity" class="text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded">Raridade</span>
+                        </div>
+                        <p id="gnome-detail-role" class="text-xs text-amber-400 font-bold tracking-wide mt-1">Especialidade</p>
+                        <p id="gnome-detail-gender" class="text-[10px] text-slate-400 mt-0.5 leading-none">Gênero</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Corpo com Estatísticas de Performance -->
+            <div class="p-6 space-y-4">
+                <div class="rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                    <p class="text-[10px] uppercase tracking-[0.22em] text-slate-500 font-black">Resumo rápido</p>
+                    <blockquote id="gnome-detail-quote" class="text-sm text-slate-100 italic font-medium border-l-4 border-amber-500 pl-3 mt-2">
+                        "Frase do Gnomo"
+                    </blockquote>
+                    <p class="text-[11px] text-slate-500 mt-2">O personagem fica em destaque. Abra apenas o que quiser consultar.</p>
+                </div>
+
+                <details class="detail-info-item group">
+                    <summary class="detail-info-summary">
+                        <span class="detail-info-label">Perfil</span>
+                        <span class="detail-info-icon">!</span>
+                    </summary>
+                    <div class="detail-info-panel">
+                        <p id="gnome-detail-desc" class="text-xs text-slate-300 leading-relaxed">
+                            Bio detalhada do gnomo e seu respectivo comportamento dentro das minas de GnoCripto.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="detail-info-item group">
+                    <summary class="detail-info-summary">
+                        <span class="detail-info-label">Atributos</span>
+                        <span class="detail-info-icon">!</span>
+                    </summary>
+                    <div class="detail-info-panel space-y-3.5">
+                        <div class="text-xs">
+                            <div class="flex items-center justify-between text-slate-300 mb-1">
+                                <span class="font-bold"><i class="fa-solid fa-pickaxe mr-1 text-slate-400"></i> Força de Mineração</span>
+                                <span id="stat-val-production" class="font-black text-amber-400">+10%</span>
+                            </div>
+                            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="stat-bar-production" class="h-full bg-amber-500 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs">
+                            <div class="flex items-center justify-between text-slate-300 mb-1">
+                                <span class="font-bold"><i class="fa-solid fa-gem mr-1 text-purple-400"></i> Sorte Rara</span>
+                                <span id="stat-val-luck" class="font-black text-purple-400">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="stat-bar-luck" class="h-full bg-purple-500 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs">
+                            <div class="flex items-center justify-between text-slate-300 mb-1">
+                                <span class="font-bold"><i class="fa-solid fa-shield-halved mr-1 text-blue-400"></i> Resistência</span>
+                                <span id="stat-val-resistance" class="font-black text-blue-400">Estável</span>
+                            </div>
+                            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="stat-bar-resistance" class="h-full bg-blue-500 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+
+                        <div class="text-xs">
+                            <div class="flex items-center justify-between text-slate-300 mb-1">
+                                <span class="font-bold"><i class="fa-solid fa-bolt mr-1 text-emerald-400"></i> Eficiência</span>
+                                <span id="stat-val-energy" class="font-black text-emerald-400">Excelente</span>
+                            </div>
+                            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div id="stat-bar-energy" class="h-full bg-emerald-500 rounded-full" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="detail-info-item group">
+                    <summary class="detail-info-summary">
+                        <span class="detail-info-label">Passiva</span>
+                        <span class="detail-info-icon">!</span>
+                    </summary>
+                    <div class="detail-info-panel">
+                        <div class="flex items-start gap-2.5">
+                            <span class="text-amber-500 mt-0.5"><i class="fa-solid fa-star"></i></span>
+                            <div>
+                                <p class="text-[10px] text-slate-500 uppercase font-bold leading-none">Habilidade especial</p>
+                                <p id="gnome-detail-passivetext" class="text-xs text-slate-300 font-medium mt-1 leading-relaxed">Descrição da passiva.</p>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+
+                <!-- Botão de Ação -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-slate-800/80">
+                    <div>
+                        <p class="text-[10px] text-slate-500 leading-none">Assinatura de Contrato (<span id="gnome-detail-days">7</span> Dias)</p>
+                        <p class="text-lg font-black text-amber-400 mt-1 flex items-center">
+                            <i class="fa-solid fa-coins mr-1 text-sm"></i><span id="gnome-detail-cost">150</span> GBC
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="closeGnomeDetailModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-4 py-2.5 rounded-xl text-xs transition duration-150 w-full sm:w-auto">
+                            Voltar
+                        </button>
+                        <button id="gnome-detail-buy-btn" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black px-6 py-2.5 rounded-xl text-xs transition duration-150 shadow-md w-full sm:w-auto">
+                            Contratar Agora
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-gnome-showcase" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-start md:items-center justify-center p-4 overflow-y-auto hidden" role="dialog" aria-modal="true" aria-labelledby="gnome-showcase-name" aria-hidden="true">
+        <div id="gnome-showcase-shell" class="bg-slate-900 border border-slate-700 max-w-6xl w-full max-h-[calc(100vh-2rem)] rounded-3xl overflow-x-hidden overflow-y-auto shadow-2xl relative my-auto" tabindex="-1">
+                <button id="btn-close-gnome-showcase-top" onclick="closeGnomeShowcase()" class="absolute right-4 top-4 bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded-full w-9 h-9 flex items-center justify-center transition text-base z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="gnome-showcase-header" class="p-6 bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-800 relative gnome-showcase-glow">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <h3 id="gnome-showcase-name" class="text-2xl font-black text-slate-100">Gnomo</h3>
+                            <span id="gnome-showcase-rarity" class="text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded">Raridade</span>
+                        </div>
+                        <p id="gnome-showcase-role" class="text-xs text-amber-400 font-bold tracking-wide">Especialidade</p>
+                        <p id="gnome-showcase-quote" class="text-xs text-slate-300 italic">"Frase"</p>
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-slate-500 pt-2">Showcase do Clã</p>
+                    </div>
+
+                    <button id="btn-back-gnome-showcase" onclick="closeGnomeShowcase()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition">
+                        Voltar
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-4 md:p-5">
+                <div id="gnome-showcase-stage" class="bg-slate-950 border border-slate-800 rounded-3xl p-4 md:p-5 relative overflow-hidden">
+                    <div id="gnome-showcase-backdrop" class="absolute inset-0"></div>
+                    <div id="gnome-showcase-rarity-particles" class="absolute inset-0 pointer-events-none"></div>
+                    <div id="gnome-showcase-fx" class="absolute inset-0 pointer-events-none"></div>
+                    <div class="absolute inset-0 gnome-showcase-sparkle"></div>
+                    <div id="gnome-showcase-layout" class="relative grid grid-cols-1 lg:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] items-start gap-5 lg:gap-6 min-w-0">
+                        <div id="gnome-showcase-visual-column" class="lg:sticky lg:top-4 space-y-3 min-w-0">
+                            <div id="gnome-showcase-svg-shell" class="w-full max-w-[23rem] mx-auto rounded-[2rem] border border-slate-700/70 bg-slate-900/80 shadow-[0_24px_70px_rgba(2,6,23,0.45)] p-3 md:p-4">
+                                <div id="gnome-showcase-svg" class="w-full aspect-square rounded-3xl bg-slate-900 border border-slate-700 overflow-hidden shadow-inner">
+                                <!-- SVG injetado dinamicamente -->
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2">
+                                <span id="gnome-showcase-scene-badge" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border text-center">Loja</span>
+                                <span id="gnome-showcase-emotion-badge-desktop" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border text-center">Foco</span>
+                                <span id="gnome-showcase-mission-badge" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border text-center">Sem Pressão</span>
+                                <span id="gnome-showcase-audio-badge" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border border-slate-700 bg-slate-950/70 text-slate-300 text-center">Ativa</span>
+                            </div>
+                            <div class="rounded-2xl border border-slate-800 bg-slate-900/65 p-3">
+                                <p id="gnome-showcase-scene-title" class="text-base font-black text-slate-100">Apresentação do clã</p>
+                                <p id="gnome-showcase-mine-badge" class="text-[10px] uppercase tracking-[0.18em] text-slate-500 mt-0.5">Modo Base</p>
+                                <div class="mt-2 flex flex-wrap gap-1.5">
+                                    <span id="gnome-showcase-status" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-800 text-slate-200">Disponível na Loja</span>
+                                    <span id="gnome-showcase-network" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-900/70 text-slate-400">Preview</span>
+                                    <span id="gnome-showcase-supervisor-badge" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border border-slate-700 bg-slate-950/70 text-slate-300">Nível 1</span>
+                                </div>
+                                <p id="gnome-showcase-hero-copy" class="text-xs text-slate-300 mt-2 leading-relaxed">O cenário fica limpo para destacar o gnomo. Abra os `!` só quando precisar.</p>
+                            </div>
+                        </div>
+                        <div id="gnome-showcase-info-column" class="min-w-0 space-y-2.5 lg:max-h-[68vh] lg:overflow-y-auto lg:pr-1">
+                            <button id="showcase-toggle-animation" type="button" onclick="window.toggleShowcaseInfoPanel('animation')" class="showcase-info-toggle" aria-controls="showcase-panel-animation" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Animação</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-animation" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-animation-copy" class="text-xs text-slate-300 leading-relaxed">Ex.: Nyra dança como líder carismática; Bortok vibra com força bruta; Faggro flutua pela sorte; Zeldrik ajusta o ritmo de engenharia; Gnorin respira com estabilidade.</p>
+                            </div>
+
+                            <button id="showcase-toggle-state" type="button" onclick="window.toggleShowcaseInfoPanel('state')" class="showcase-info-toggle" aria-controls="showcase-panel-state" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Estado do jogo</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-state" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-state-copy" class="text-xs text-slate-300 leading-relaxed">Este preview mostra o gnomo em destaque dentro de uma apresentação limpa e direta.</p>
+                            </div>
+
+                            <button id="showcase-toggle-scene" type="button" onclick="window.toggleShowcaseInfoPanel('scene')" class="showcase-info-toggle" aria-controls="showcase-panel-scene" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Cena operacional</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-scene" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-scene-copy" class="text-xs text-slate-300 leading-relaxed">O gnomo aparece em um cenário fixo, com foco total na sua identidade visual.</p>
+                            </div>
+
+                            <button id="showcase-toggle-emotion" type="button" onclick="window.toggleShowcaseInfoPanel('emotion')" class="showcase-info-toggle" aria-controls="showcase-panel-emotion" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Estado emocional</span>
+                                <span id="gnome-showcase-emotion-badge" class="text-[10px] uppercase font-black px-2 py-1 rounded-lg border">Foco</span>
+                            </button>
+                            <div id="showcase-panel-emotion" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-emotion-copy" class="text-xs text-slate-300 leading-relaxed">O gnomo ajusta sua postura conforme a operação, as missões ativas e o humor geral do clã.</p>
+                                <p id="gnome-showcase-interaction-copy" class="text-xs text-slate-500 mt-2 leading-relaxed">A animação fica concentrada no gnomo, enquanto o restante da cena permanece estático.</p>
+                            </div>
+
+                            <button id="showcase-toggle-mission" type="button" onclick="window.toggleShowcaseInfoPanel('mission')" class="showcase-info-toggle" aria-controls="showcase-panel-mission" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Missão ativa</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-mission" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-mission-copy" class="text-xs text-slate-300 leading-relaxed">As missões do clã ajudam a contextualizar o momento atual do gnomo nesta apresentação.</p>
+                            </div>
+
+                            <button id="showcase-toggle-audio" type="button" onclick="window.toggleShowcaseInfoPanel('audio')" class="showcase-info-toggle" aria-controls="showcase-panel-audio" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Paisagem sonora</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-audio" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-audio-copy" class="text-xs text-slate-300 leading-relaxed">Um som curto pode acompanhar a abertura do showcase, sem competir com o visual do personagem.</p>
+                            </div>
+
+                            <button id="showcase-toggle-supervisor" type="button" onclick="window.toggleShowcaseInfoPanel('supervisor')" class="showcase-info-toggle" aria-controls="showcase-panel-supervisor" aria-expanded="false">
+                                <span class="showcase-info-toggle-label">Supervisor</span>
+                                <span class="showcase-info-toggle-icon">!</span>
+                            </button>
+                            <div id="showcase-panel-supervisor" class="showcase-info-panel hidden">
+                                <p id="gnome-showcase-supervisor-copy" class="text-xs text-slate-300 leading-relaxed">O nível e a experiência do supervisor ajudam a contextualizar a fase atual do clã.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-mine-live" class="fixed inset-0 bg-slate-950/92 backdrop-blur-lg z-50 hidden items-center justify-center p-4">
+        <div id="mine-live-shell" class="w-full max-w-4xl rounded-3xl border border-slate-700 bg-slate-900 shadow-2xl overflow-hidden relative mine-live-shell">
+            <button onclick="closeMineLiveModal()" class="absolute right-4 top-4 bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded-full w-9 h-9 flex items-center justify-center transition z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="relative p-6 sm:p-8 overflow-hidden">
+                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-[0.28em] text-blue-400 font-black">Frente Operacional Ao Vivo</p>
+                        <h3 id="mine-live-title" class="text-2xl sm:text-3xl font-black text-slate-100 mt-2">Mina LIVE</h3>
+                        <p id="mine-live-subtitle" class="text-sm text-slate-300 mt-2 max-w-2xl">Acompanhe seus gnomos trabalhando com leitura do turno, pulsos e baú parcial.</p>
+                    </div>
+                    <span id="mine-live-badge" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-lg border border-blue-500/30 bg-blue-500/10 text-blue-200 self-start">LIVE</span>
+                </div>
+                <div id="mine-live-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-mine-cutscene" class="fixed inset-0 bg-slate-950/92 backdrop-blur-lg z-50 hidden items-center justify-center p-4">
+        <div id="mine-cutscene-shell" class="w-full max-w-2xl rounded-3xl border border-slate-700 bg-slate-900 shadow-2xl overflow-hidden relative">
+            <button onclick="closeMineCutscene()" class="absolute right-4 top-4 bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded-full w-9 h-9 flex items-center justify-center transition z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="mine-cutscene-stage" class="relative p-6 sm:p-8 overflow-hidden">
+                <div id="mine-cutscene-backdrop" class="absolute inset-0"></div>
+                <div class="relative space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-[0.28em] text-amber-400 font-black">Nova Frente de Mineração</p>
+                            <h3 id="mine-cutscene-title" class="text-2xl sm:text-3xl font-black text-slate-100 mt-2">Mina Desbloqueada</h3>
+                            <p id="mine-cutscene-subtitle" class="text-sm text-slate-300 mt-2 max-w-xl">Uma nova camada do clã foi ativada e agora amplia a operação com identidade própria.</p>
+                        </div>
+                        <span id="mine-cutscene-badge" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-950/70 text-slate-200 self-start">Mina 1</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">Ritmo</p>
+                            <p id="mine-cutscene-rhythm" class="text-sm text-slate-200 font-bold mt-2">Operação Estável</p>
+                        </div>
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">Coletável</p>
+                            <p id="mine-cutscene-collectible" class="text-sm text-slate-200 font-bold mt-2">Fragmento</p>
+                        </div>
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">Capacidade</p>
+                            <p id="mine-cutscene-capacity" class="text-sm text-slate-200 font-bold mt-2">0 Gnomos</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-2">
+                        <p id="mine-cutscene-copy" class="text-xs text-slate-300 max-w-xl leading-relaxed">A nova mina entra oficialmente na operação do clã, com recursos, ritmo e capacidade próprios para a próxima fase.</p>
+                        <button onclick="closeMineCutscene()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs transition self-start sm:self-auto">
+                            Entrar na Mina
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-levelup-cutscene" class="fixed inset-0 bg-slate-950/92 backdrop-blur-lg z-50 hidden items-center justify-center p-4">
+        <div id="levelup-cutscene-shell" class="w-full max-w-2xl rounded-3xl border border-amber-500/20 bg-slate-900 shadow-2xl overflow-hidden relative">
+            <button onclick="closeLevelUpCutscene()" class="absolute right-4 top-4 bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-slate-100 rounded-full w-9 h-9 flex items-center justify-center transition z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="levelup-cutscene-stage" class="relative p-6 sm:p-8 overflow-hidden">
+                <div id="levelup-cutscene-backdrop" class="absolute inset-0"></div>
+                <div class="relative space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-[0.28em] text-amber-400 font-black">Supervisor Evoluído</p>
+                            <h3 id="levelup-cutscene-title" class="text-2xl sm:text-3xl font-black text-slate-100 mt-2">Nível 2</h3>
+                            <p id="levelup-cutscene-subtitle" class="text-sm text-slate-300 mt-2 max-w-xl">Seu clã alcançou um novo patamar e agora conduz as operações com mais confiança.</p>
+                        </div>
+                        <span id="levelup-cutscene-badge" class="text-[10px] uppercase font-black px-2.5 py-1 rounded-lg border border-slate-700 bg-slate-950/70 text-slate-200 self-start">Level Up</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">Patamar</p>
+                            <p id="levelup-cutscene-rank" class="text-sm text-slate-200 font-bold mt-2">Ascensão Tática</p>
+                        </div>
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">Próxima Meta</p>
+                            <p id="levelup-cutscene-next-goal" class="text-sm text-slate-200 font-bold mt-2">Expandir Mina</p>
+                        </div>
+                        <div class="bg-slate-950/55 border border-slate-800 rounded-2xl p-4">
+                            <p class="text-[10px] uppercase font-black text-slate-500">XP Restante</p>
+                            <p id="levelup-cutscene-xp" class="text-sm text-slate-200 font-bold mt-2">0 XP</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between pt-2">
+                        <p id="levelup-cutscene-copy" class="text-xs text-slate-300 max-w-xl leading-relaxed">O avanço do supervisor reforça a presença do clã e aponta o próximo objetivo importante da jornada.</p>
+                        <button onclick="closeLevelUpCutscene()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs transition self-start sm:self-auto">
+                            Continuar Operação
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-wallet-actions" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 max-w-md w-full rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeWalletModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-100 transition text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-black text-slate-100 flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-wallet text-amber-400"></i>
+                <span data-i18n="topbar.wallet">Wallet</span>
+            </h3>
+            <p class="text-xs text-slate-400" data-i18n="swap.walletActionCopy">Escolha a operacao que deseja abrir no painel financeiro do MVP.</p>
+
+            <div class="space-y-3 mt-6">
+                <button onclick="openWalletAction('deposit')" class="w-full text-left bg-slate-950 border border-emerald-500/25 hover:border-emerald-400/50 rounded-2xl p-4 transition group">
+                    <div class="flex items-start gap-3">
+                        <span class="w-11 h-11 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center shrink-0 font-black shadow-md">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-sm font-black text-slate-100" data-i18n="swap.walletActionDepositTitle">1. Deposito</p>
+                                <span class="text-[10px] uppercase font-black text-emerald-300">USDT → GBC</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="swap.walletActionDepositCopy">Converte USDT em GnoCripto e envia o valor para o saldo interno do jogo.</p>
+                        </div>
+                    </div>
+                </button>
+
+                <button onclick="openWalletAction('withdrawal')" class="w-full text-left bg-slate-950 border border-sky-500/25 hover:border-sky-400/50 rounded-2xl p-4 transition group">
+                    <div class="flex items-start gap-3">
+                        <span class="w-11 h-11 rounded-2xl bg-sky-500 text-slate-950 flex items-center justify-center shrink-0 font-black shadow-md">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-sm font-black text-slate-100" data-i18n="swap.walletActionWithdrawalTitle">2. Saque</p>
+                                <span class="text-[10px] uppercase font-black text-sky-300">GBC → USDT</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="swap.walletActionWithdrawalCopy">Converte GnoCripto em USDT e usa a carteira BSC ativa cadastrada em Configuracoes.</p>
+                        </div>
+                    </div>
+                </button>
+
+                <button onclick="openWalletAction('swap')" class="w-full text-left bg-slate-950 border border-amber-500/25 hover:border-amber-400/50 rounded-2xl p-4 transition group">
+                    <div class="flex items-start gap-3">
+                        <span class="w-11 h-11 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 font-black shadow-md">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </span>
+                        <div class="min-w-0">
+                            <div class="flex items-center justify-between gap-3">
+                                <p class="text-sm font-black text-slate-100" data-i18n="swap.walletActionSwapTitle">3. Swap</p>
+                                <span class="text-[10px] uppercase font-black text-amber-300" data-i18n="swap.walletActionSwapMode">Modo geral</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1" data-i18n="swap.walletActionSwapCopy">Abre o conversor geral para alternar entre deposito e saque dentro do mesmo modal.</p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SWAP USDT / GNOCRIPTO -->
+    <div id="modal-swap" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-start sm:items-center justify-center p-4 overflow-y-auto hidden">
+        <div id="swap-modal-shell" class="bg-slate-900 border border-slate-700 max-w-md w-full rounded-2xl p-6 shadow-2xl relative max-h-[calc(100vh-2rem)] overflow-y-auto custom-scrollbar">
+            <button onclick="closeSwapModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-100 transition text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="swap-modal-title" class="text-lg font-black text-slate-100 flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-arrow-right-arrow-left text-amber-500"></i>
+                <span data-i18n="swap.swapTitle">GnoCripto & USDT Swap Instantâneo</span>
+            </h3>
+            <p id="swap-modal-subtitle" class="text-xs text-slate-400" data-i18n="swap.swapSubtitleBuy">Conversão indexada a taxa de câmbio constante de 1 USDT = 100 GnoCripto. Taxa Zero de Operação.</p>
+
+            <div id="deposit-blockbee-flow" class="hidden space-y-4 mt-6">
+                <div class="bg-slate-950 p-4 rounded-xl border border-emerald-500/20">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase font-black tracking-wide" data-i18n="swap.depositNetwork">Rede de Deposito</p>
+                            <p class="text-sm font-black text-slate-100 mt-2">USDT BSC (BEP-20)</p>
+                            <p class="text-[10px] text-slate-400 mt-1" data-i18n="swap.depositFlowCopy">Fluxo preparado para integracao futura com BlockBee via backend.</p>
+                        </div>
+                        <span class="deposit-min-badge text-[9px] uppercase font-black bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2 py-1 rounded-lg">Min. $5</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <label class="text-[10px] text-slate-500 uppercase font-black tracking-wide block" data-i18n="swap.depositAmountLabel">Valor do Deposito em USDT</label>
+                    <div class="flex items-center justify-between gap-3 mt-2">
+                        <input oninput="syncDepositPreview()" id="deposit-input-amount" type="number" min="5" step="0.01" value="5" class="deposit-amount-input bg-transparent text-2xl font-extrabold focus:outline-none w-2/3 text-slate-100" placeholder="5.00">
+                        <span class="text-xs font-bold bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-slate-200">USDT</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 mt-2" data-i18n="swap.depositMinCopy">O usuario deve informar no minimo US$ 5.00.</p>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <div class="flex items-center justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] text-slate-500 uppercase font-black tracking-wide" data-i18n="swap.depositCreditPreview">Credito Previsto no Jogo</p>
+                            <p class="text-lg font-black text-amber-400 mt-2"><span id="deposit-output-preview">500</span> GnoCripto</p>
+                        </div>
+                        <span class="text-[10px] uppercase font-black bg-slate-800 px-2 py-1 rounded-lg border border-slate-700 text-slate-200">1 USDT = 100 GBC</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[10px] text-slate-400 leading-relaxed">
+                    <span data-i18n="swap.blockbeeNote">BlockBee: na fase com backend, a aplicacao chamara a API no servidor para criar a solicitacao de deposito, obter endereco/QR e validar o pagamento por webhook. A API key nao fica exposta no front-end.</span>
+                </div>
+
+                <button id="deposit-generate-button" onclick="generateBlockBeeDepositRequest()" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black py-3 rounded-xl shadow-md transition duration-200">
+                    <span data-i18n="swap.generateDeposit">Gerar Deposito BlockBee</span>
+                </button>
+
+                <div id="deposit-request-card" class="hidden bg-slate-950 border border-emerald-500/20 rounded-2xl p-4 space-y-4">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-[10px] uppercase font-black text-slate-500" data-i18n="swap.generatedRequest">Solicitacao Gerada</p>
+                            <p id="deposit-request-id" class="text-sm font-black text-slate-100 mt-2">BB-DEP-0000</p>
+                            <p id="deposit-request-status" class="text-[10px] text-emerald-300 font-bold mt-1" data-i18n="swap.awaitingPayment">Aguardando pagamento</p>
+                        </div>
+                        <span class="text-[10px] uppercase font-black bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2 py-1 rounded-lg">BlockBee Ready</span>
+                    </div>
+
+                    <div class="grid grid-cols-[96px_minmax(0,1fr)] gap-4 items-start">
+                        <div class="bg-white rounded-xl p-2 shadow-inner">
+                            <img id="deposit-request-qr" src="" alt="QR do deposito BlockBee" class="w-20 h-20 mx-auto rounded-lg">
+                        </div>
+                        <div class="space-y-3 min-w-0">
+                            <div>
+                                <p class="text-[10px] uppercase font-black text-slate-500">address_in</p>
+                                <p id="deposit-request-address" class="text-xs font-mono text-slate-200 mt-2 break-all">0x</p>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="copyDepositAddress()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-bold px-3 py-2 rounded-xl text-xs transition">
+                                    <span data-i18n="swap.copyWallet">Copiar Carteira</span>
+                                </button>
+                                <button id="deposit-request-uri-button" onclick="openDepositPaymentUri()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-100 font-bold px-3 py-2 rounded-xl text-xs transition">
+                                    <span data-i18n="swap.openPaymentUri">Abrir payment_uri</span>
+                                </button>
+                                <span id="deposit-request-network" class="text-[10px] uppercase font-black bg-slate-800 px-2 py-2 rounded-xl border border-slate-700 text-emerald-300">USDT • BSC / BEP20</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="bg-slate-900 rounded-xl border border-slate-800 p-3">
+                            <p class="text-slate-500 uppercase font-black">payment_id</p>
+                            <p id="deposit-request-payment-id" class="text-slate-100 font-black mt-1 break-all">bb_dep_0000</p>
+                        </div>
+                        <div class="bg-slate-900 rounded-xl border border-slate-800 p-3">
+                            <p class="text-slate-500 uppercase font-black">status</p>
+                            <p id="deposit-request-status-code" class="text-emerald-400 font-black mt-1">pending</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="bg-slate-900 rounded-xl border border-slate-800 p-3">
+                            <p class="text-slate-500 uppercase font-black" data-i18n="swap.exactAmount">Valor Exato</p>
+                            <p id="deposit-request-amount" class="text-slate-100 font-black mt-1">5.00 USDT</p>
+                        </div>
+                        <div class="bg-slate-900 rounded-xl border border-slate-800 p-3">
+                            <p class="text-slate-500 uppercase font-black" data-i18n="swap.confirmedCredit">Credito Apos Confirmacao</p>
+                            <p id="deposit-request-gbc" class="text-amber-400 font-black mt-1">500 GBC</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-xl border border-slate-800 p-3 text-xs">
+                        <p class="text-slate-500 uppercase font-black">payment_uri</p>
+                        <p id="deposit-request-payment-uri" class="text-slate-300 font-mono mt-1 break-all">blockbee://payment</p>
+                    </div>
+
+                    <p class="text-[10px] text-slate-500 leading-relaxed" data-i18n="swap.futureUxCopy">MVP ajustado para UX futura da BlockBee. Quando o backend entrar, este card recebera o endereco/QR reais retornados pela API e o saldo sera creditado somente apos confirmacao do pagamento.</p>
+                </div>
+            </div>
+
+            <div id="swap-standard-flow" class="space-y-4 mt-6">
+                <!-- Origem -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <label class="text-[10px] text-slate-500 uppercase font-black tracking-wide block" data-i18n="swap.sourceAsset">Origem do Ativo</label>
+                    <div class="flex items-center justify-between mt-2">
+                        <input oninput="updateSwapPreview('from')" id="swap-input-amount" type="number" value="1" class="bg-transparent text-xl font-extrabold focus:outline-none w-2/3" placeholder="0.0">
+                        <select onchange="updateSwapPreview('select')" id="swap-from-currency" class="bg-slate-800 text-xs font-bold text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none">
+                            <option value="USDT">USDT</option>
+                            <option value="GBC">GnoCripto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Ícone Separador -->
+                <div class="flex justify-center -my-2 relative z-10">
+                    <div class="w-8 h-8 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-xs shadow-md border-4 border-slate-900">
+                        <i class="fa-solid fa-arrow-down-long"></i>
+                    </div>
+                </div>
+
+                <!-- Destino -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <label class="text-[10px] text-slate-500 uppercase font-black tracking-wide block" data-i18n="swap.destinationAsset">Destino do Ativo (Simulado)</label>
+                    <div class="flex items-center justify-between mt-2">
+                        <span id="swap-output-preview" class="text-xl font-extrabold text-amber-400">100.00</span>
+                        <span id="swap-output-currency-text" class="text-xs font-bold bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">GnoCripto</span>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between gap-3">
+                        <label class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wide" data-i18n="swap.withdrawalDestination">Destino do Saque</label>
+                        <button onclick="openSettingsFromSwap()" class="text-[10px] text-amber-400 hover:text-amber-300 font-bold transition">
+                            <span data-i18n="swap.changeInSettings">Alterar em Configurações</span>
+                        </button>
+                    </div>
+                    <div class="w-full bg-slate-950 border border-slate-800 text-slate-200 px-3 py-3 rounded-xl">
+                        <div class="flex items-center justify-between gap-3">
+                            <p id="swap-wallet-summary" class="text-sm font-bold">Nenhuma carteira configurada</p>
+                            <span id="swap-wallet-network" class="text-[10px] uppercase font-black bg-slate-800 px-2 py-1 rounded-lg border border-slate-700">USDT • BSC</span>
+                        </div>
+                        <p id="swap-wallet-helper" class="text-[10px] text-slate-400 mt-1">Cadastre uma carteira BSC em Configurações para liberar saques em USDT.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[10px] text-slate-400 leading-relaxed">
+                    <span data-i18n="swap.importantNote">Nota Importante: Os saques externos deste MVP sao limitados a USDT na rede BSC. A carteira ativa selecionada em Configuracoes sera usada como destino.</span>
+                </div>
+
+                <button id="swap-confirm-button" onclick="executeSwap()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black py-3 rounded-xl shadow-md transition duration-200">
+                    <span data-i18n="swap.confirmSwap">Confirmar Transação de Swap</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-withdrawal-confirm" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-700 max-w-md w-full rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeWithdrawalConfirmModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-100 transition text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-lg font-black text-slate-100 flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-shield text-emerald-400"></i>
+                <span data-i18n="swap.confirmWithdrawalTitle">Confirmar Saque em USDT</span>
+            </h3>
+            <p id="confirm-withdraw-note" class="text-xs text-slate-400" data-i18n="swap.reviewTransfer">Revise os dados da transferencia antes de confirmar.</p>
+
+            <div class="space-y-4 mt-6">
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <p class="text-[10px] uppercase font-black text-slate-500" data-i18n="swap.source">Origem</p>
+                    <p class="text-lg font-black text-amber-400 mt-2"><span id="confirm-withdraw-amount-gbc">0</span> GBC</p>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <p class="text-[10px] uppercase font-black text-slate-500" data-i18n="swap.destination">Destino</p>
+                    <p class="text-lg font-black text-emerald-400 mt-2"><span id="confirm-withdraw-amount-usdt">0.00</span> USDT</p>
+                    <p class="text-[10px] text-slate-500 mt-1" data-i18n="swap.fixedNetwork">Rede fixa: BSC / BEP20</p>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+                    <p class="text-[10px] uppercase font-black text-slate-500" data-i18n="swap.selectedWallet">Carteira Selecionada</p>
+                    <p id="confirm-withdraw-wallet" class="text-sm font-bold text-slate-200 mt-2">Carteira Principal</p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button onclick="closeWithdrawalConfirmModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold py-3 rounded-xl transition">
+                        <span data-i18n="settings.cancel">Cancelar</span>
+                    </button>
+                    <button onclick="confirmWithdrawalExecution()" class="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-black py-3 rounded-xl transition shadow-md">
+                        <span data-i18n="swap.confirmWithdrawal">Confirmar Saque</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu de Navegação Inferior Fixo e Responsivo -->
+    <nav class="bg-slate-900 border-t border-slate-800 fixed bottom-0 left-0 right-0 z-40 px-3 py-2 shadow-2xl">
+        <div class="max-w-4xl mx-auto flex items-center justify-around text-center">
+            <button onclick="switchTab('minas')" id="nav-minas" class="text-amber-500 flex flex-col items-center gap-1 flex-1 py-1 transition">
+                <i class="fa-solid fa-cubes text-lg"></i>
+                <span class="text-[10px] font-bold" data-i18n="nav.mines">Minas</span>
+            </button>
+            <button onclick="switchTab('loja')" id="nav-loja" class="text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1 flex-1 py-1 transition">
+                <i class="fa-solid fa-store text-lg"></i>
+                <span class="text-[10px] font-bold" data-i18n="nav.shop">Loja</span>
+            </button>
+            <button onclick="switchTab('inventario')" id="nav-inventario" class="text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1 flex-1 py-1 transition">
+                <i class="fa-solid fa-warehouse text-lg"></i>
+                <span class="text-[10px] font-bold" data-i18n="nav.inventory">Inventário</span>
+            </button>
+            <button onclick="switchTab('afiliados')" id="nav-afiliados" class="text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1 flex-1 py-1 transition">
+                <i class="fa-solid fa-share-nodes text-lg"></i>
+                <span class="text-[10px] font-bold" data-i18n="nav.affiliates">Afiliados</span>
+            </button>
+            <button onclick="switchTab('missoes')" id="nav-missoes" class="text-slate-400 hover:text-slate-200 flex flex-col items-center gap-1 flex-1 py-1 transition">
+                <i class="fa-solid fa-list-check text-lg"></i>
+                <span class="text-[10px] font-bold" data-i18n="nav.missions">Missões</span>
+            </button>
+        </div>
+    </nav>
+
+    <script src="./src/js/core/config.js?v=ux-final-20260708-mines-economy-hotfix1"></script>
+    <script src="./src/js/core/state.js?v=ux-final-20260708-mines-economy-hotfix1"></script>
+    <script src="./src/js/core/i18n.js?v=ux-final-20260708-mines-live-heroes"></script>
+    <script src="./src/js/core/ui.js?v=ux-final-20260708-i18n-pass5"></script>
+    <script src="./src/js/features/mines.js?v=ux-final-20260708-mines-live-heroes"></script>
+    <script src="./src/js/features/store.js?v=ux-final-20260708-i18n-pass4"></script>
+    <script src="./src/js/features/inventory.js?v=ux-final-20260708-i18n-pass4"></script>
+    <script src="./src/js/features/referrals.js?v=ux-final-20260708-i18n-pass4"></script>
+    <script src="./src/js/features/missions.js?v=ux-final-20260708-i18n-pass4"></script>
+    <script src="./src/js/features/navigation.js?v=ux-final-20260707"></script>
+    <script src="./src/js/features/settings.js?v=ux-final-20260708-i18n-pass6"></script>
+    <script src="./src/js/features/swap.js?v=ux-final-20260708-i18n-pass5"></script>
+    <script src="./src/js/main.js?v=ux-final-20260708-i18n-pass5"></script>
+</body>
+</html>
